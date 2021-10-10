@@ -3,8 +3,7 @@ from typing import List
 
 json_data = open('en.json')
 input_json = json.load(json_data)
-# result = []
-x = 0
+index = 0
 
 def get_all_values(dict, result: List):
     for key in dict:
@@ -15,18 +14,22 @@ def get_all_values(dict, result: List):
             result.append(dict[key])
     return result
 
-def put_update_values_back(dict, index: int, translation_vector):
+def get_translated_json(dict,translation_vector):
+    global index
     for key in dict:
         value_type = type(dict[key])
         if value_type != type(dict):
-            dict[key] = translation_vector[index] + 'updated' + str(index)
+            dict[key] = translation_vector[index].translated_text
             index += 1
         else:
-            put_update_values_back(dict[key], index, translation_vector)
+            get_translated_json(dict[key], translation_vector)
     return dict
 
-value_vector = get_all_values(input_json, [])
-output = put_update_values_back(input_json, 0, value_vector)
+def reset_index():
+    global index
+    index = 0
 
-with open('output.json', 'w') as f:
-    json.dump(output, f)
+def put_output_in_file(dict, filename):
+    with open(filename, 'w') as f:
+        json.dump(dict, f)
+

@@ -1,8 +1,8 @@
 import os
 import json
 from google.cloud import translate
-from google.cloud.translate_v3.types.translation_service import TranslateTextRequest
-from main import result
+from google.cloud.translate_v3.types.translation_service import TranslateTextRequest, Translation
+from file_handler import *
 
 credential_file = 'credentials.json'
 translation_config_file = 'translation-config.json'
@@ -19,11 +19,14 @@ translate_client = translate.TranslationServiceClient()
 translateRequest = TranslateTextRequest()
 translateRequest.source_language_code = source_language
 translateRequest.parent = 'projects/' + credentials['project_id']
+translateRequest.mime_type = 'text/plain'
 
 for language in target_languages:
     translateRequest.target_language_code = language
-    translateRequest.contents = result
+    translateRequest.contents = get_all_values(input_json, [])
     response = (translate_client.translate_text(translateRequest)).translations
-    print(len(response))
-    for x in response:
-        print(x.translated_text)
+    translated_array = list(response)
+    print(len(translated_array))
+    reset_index()
+    updated_json = get_translated_json(input_json, translated_array)
+    put_output_in_file(updated_json, language + '.json')

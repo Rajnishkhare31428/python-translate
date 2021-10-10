@@ -1,7 +1,8 @@
 {
     "source_language": "en",
     "target_languages": [
-        "es"
+        "es",
+        "hi"
     ],
     "input_file": "en.json"
 }
