@@ -20,6 +20,7 @@ translateRequest = TranslateTextRequest()
 translateRequest.source_language_code = source_language
 translateRequest.parent = 'projects/' + credentials['project_id']
 translateRequest.mime_type = 'text/html'
+translateRequest.__format__ = 'text'
 
 for language in target_languages:
     reset_index()
