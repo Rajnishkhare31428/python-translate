@@ -19,7 +19,7 @@ def get_translated_json(dict,translation_vector):
     for key in dict:
         value_type = type(dict[key])
         if value_type != type(dict):
-            dict[key] = translation_vector[index].translated_text
+            dict[key] = str(bytes(translation_vector[index].translated_text, 'utf-8').decode('utf8'))
             index += 1
         else:
             get_translated_json(dict[key], translation_vector)
@@ -30,6 +30,6 @@ def reset_index():
     index = 0
 
 def put_output_in_file(dict, filename):
-    with open(filename, 'w') as f:
+    with open('output/' + filename, 'w') as f:
         json.dump(dict, f)
 

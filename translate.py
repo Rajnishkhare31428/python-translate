@@ -19,14 +19,17 @@ translate_client = translate.TranslationServiceClient()
 translateRequest = TranslateTextRequest()
 translateRequest.source_language_code = source_language
 translateRequest.parent = 'projects/' + credentials['project_id']
-translateRequest.mime_type = 'text/plain'
+translateRequest.mime_type = 'text/html'
 
 for language in target_languages:
+    reset_index()
+    print(language)
     translateRequest.target_language_code = language
+    translateRequest.source_language_code = source_language
     translateRequest.contents = get_all_values(input_json, [])
     response = (translate_client.translate_text(translateRequest)).translations
     translated_array = list(response)
-    print(len(translated_array))
-    reset_index()
     updated_json = get_translated_json(input_json, translated_array)
     put_output_in_file(updated_json, language + '.json')
+    
+print('Translation finished!')
