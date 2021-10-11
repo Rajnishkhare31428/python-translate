@@ -12,6 +12,9 @@ source_language = translation_config['source_language']
 target_languages = translation_config['target_languages']
 input_file = translation_config['input_file']
 
+json_data = open(input_file)
+input_json = json.load(json_data)
+
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
 
 
@@ -23,7 +26,7 @@ for language in target_languages:
     translateRequest.parent = 'projects/' + credentials['project_id']
     translateRequest.mime_type = 'text/html'
     translateRequest.target_language_code = language
-    translateRequest.contents = get_all_values(input_json, [])
+    translateRequest.contents = get_all_values_recursively(input_json, [])
     response = (translate_client.translate_text(translateRequest)).translations
     translated_array = list(response)
     updated_json = get_translated_json(input_json, translated_array)
