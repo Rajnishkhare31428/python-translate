@@ -1,9 +1,6 @@
 {
     "source_language": "en",
     "target_languages": [
-        "hi",
-        "vi",
-        "zh",
         "ms"
     ],
     "input_file": "en.json"

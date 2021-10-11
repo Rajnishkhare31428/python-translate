@@ -1,4 +1,4 @@
-import encodings
-string_ex = '\u092a\u094d\u0930\u0915\u093e\u0930'
 
-print((bytes(string_ex, 'utf-8')).decode('utf8'))
+line = '\u0938\u0902\u092a\u093e\u0926\u093f\u0924 \u0915\u0930\u0947\u0902'
+file = open('output.txt', 'w')
+file.write(ord(line))

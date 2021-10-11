@@ -14,19 +14,15 @@ input_file = translation_config['input_file']
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
 
-translate_client = translate.TranslationServiceClient() 
-
-translateRequest = TranslateTextRequest()
-translateRequest.source_language_code = source_language
-translateRequest.parent = 'projects/' + credentials['project_id']
-translateRequest.mime_type = 'text/html'
-translateRequest.__format__ = 'text'
 
 for language in target_languages:
     reset_index()
-    print(language)
-    translateRequest.target_language_code = language
+    translate_client = translate.TranslationServiceClient() 
+    translateRequest = TranslateTextRequest()
     translateRequest.source_language_code = source_language
+    translateRequest.parent = 'projects/' + credentials['project_id']
+    translateRequest.mime_type = 'text/html'
+    translateRequest.target_language_code = language
     translateRequest.contents = get_all_values(input_json, [])
     response = (translate_client.translate_text(translateRequest)).translations
     translated_array = list(response)
