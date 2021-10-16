@@ -1,0 +1,196 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card filter">
+      <div class="card-body">
+        <a class="btn back-btn" href="javascript:void(0)" [class.disabled]="!backButtonEnabled" (click)="goBack()">
+          <i class="icon-arrow-left-circle" aria-hidden="true"></i>
+        </a>
+        <h4 class="card-title">{{'agent.senior' | translate}}
+        </h4>
+      </div>
+    </div>
+
+    <div class="card filter margin-top-10">
+      <div class="card-header">
+        <h5 class="card-title"> <i class="fa fa-list"></i> {{ 'agent.list' | translate}} </h5>
+
+        <!-- <div class="row">
+          <div class="col-12 col-sm-6">
+            <div class="input-group">
+              <select class="form-control" [(ngModel)]="params['status']" placeholder="" name="status">
+                <option value="-1">{{'advertisement.selectAStatus' | translate}}</option>
+                <option *ngFor="let status of AdminStatus | keyvalue" [value]="status.key">
+                  {{status.value}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-12 col-sm-3">
+            <span class="input-group-prepend">
+              <button class="btn btn-primary filter-btn" type="button" (click)="searchFilter();"> <i class="fa fa-filter"></i>
+                {{'advertisement.filter' | translate}}</button>&nbsp;
+            </span>
+
+          </div>
+        </div>
+        <form class="row mt-1">
+          <div class="col-12 col-sm-6">
+            <div class="input-group">
+              <input class="form-control" [(ngModel)]="params['keyword']" id="search_keyword" type="text"
+                name="search_keyword" placeholder="{{'advertisement.searchByAdvertismentName' | translate}}" (ngModelChange)="search()"
+                autocomplete="off">
+            </div>
+          </div>
+          <div class="col-12 col-sm-6">
+          
+            <button class="btn btn-warning filter-btn" (click)="searchFilter('reset');"><i class="fa fa-refresh"></i>
+              {{'advertisement.resetFilters' | translate}}</button>
+            <a class="btn back-btn" href="javascript:void(0)" (click)="goBack()">
+              <i class="icon-arrow-left-circle" aria-hidden="true"></i>
+            </a>
+          </div>
+        </form> -->
+      </div>
+      <div class="card-body custom-listing-table">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800"> </h1>
+          <h5 class="mb-0 text-gray-800"> {{'agent.totalRecord' | translate}} : {{totalAdv}}</h5>
+        </div>
+        <div class="width-table">
+          <table class="table table-responsive-sm table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th style="width: 60px;">{{ 'agent.game' | translate}}</th>
+                <th>{{ 'agent.username' | translate}}</th>
+                <th>{{ 'agent.name' | translate}}</th>
+                <th>{{ 'agent.score' | translate}}</th>
+                <!-- <th>{{ 'agent.lastLogin' | translate}}</th> -->
+                <th>{{ 'agent.percent' | translate}}</th>
+                <th>{{ 'agent.remark' | translate}} </th>
+                <th>{{ 'agent.status' | translate}} </th>
+                <th>{{ 'agent.action' | translate}} </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="error">
+                <td colspan="9" class="table-danger">There was an error</td>
+              </tr>
+              <tr *ngIf="!error && !adminList">
+                <td colspan="9">{{'advertisement.loading' | translate}}...</td>
+              </tr>
+              <tr *ngIf="adminList && !(adminList.length>0)">
+                <td colspan="9" class="text-center"> {{'advertisement.noAdvertismentFound' | translate}}</td>
+              </tr>
+              <ng-container *ngFor="let admin of adminList; let agentIndex = index">
+                <tr>
+                  <td style="text-align: center;"><i class="fa"
+                      [ngClass]="{'fa-plus': admin.assign_games.length > 0, 'fa-minus': agentIndex == expandIndex}"
+                      (click)="expand(agentIndex, admin.admin_id)"></i></td>
+                  <td>{{ admin.username }}</td>
+                  <td>{{ admin.name }}</td>
+                  <td>{{ admin.balance }}</td>
+                 
+                  <td>{{ admin.percent }}</td>
+                  <td>{{ admin.description }}</td>
+
+                  <td *ngIf="!adminList.isEditabel">
+                    <span class="badge"
+                      [ngClass]="{'badge-success': (admin.status == 1), 'badge-secondary': (admin.status == 0), 'badge-danger': (admin.status > 1)}">{{AdminStatus[admin.status]
+                      }}</span>
+                  </td>
+                  <td *ngIf="admin.isEditabel">
+                    <select class="form-control" placeholder="Select Status" name="kyc_type" name="status"
+                      [(ngModel)]="admin.status" [disabled]="!admin.isEditabel">
+                      <option *ngFor="let status of AdminStatus | keyvalue" [value]="status.key">
+                        {{status.value}}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+
+                    <button href="javascript:void(0);" class="btn-warning" [routerLink]="['edit', admin.admin_id]"><i
+                        class="fa fa-edit"></i> {{ 'agent.edit' | translate}} </button>
+                    <button href="javascript:void(0);" class="btn-success" [routerLink]="['set-score', admin.admin_id]">
+                      {{'agent.setScore' | translate}} </button>
+                    <!-- <button routerLink="set-limit/{{admin.admin_id}}" class="btn-warning" > {{ 'agent.setLimit' | translate}} </button> -->
+                    <button href="javascript:void(0);" *ngIf="admin.status == 0" class="btn-danger"
+                      (click)="changeAgentStatus(admin.admin_id, '1')">{{ 'agentDetail.enable' | translate}}</button>
+                    <button href="javascript:void(0);" *ngIf="admin.status == 1" class="btn-danger"
+                      (click)="changeAgentStatus(admin.admin_id, '0')">{{ 'agentDetail.disable' | translate}}</button>
+                    <button href="javascript:void(0);" class="btn-info" *ngIf="admin.games"
+                      [routerLink]="['create-game', admin.admin_id]"><i class="fa fa-plus"></i> {{ 'agent.addGame' |
+                      translate}} </button>
+                    <!-- <a href="javascript:void(0);" *ngIf="!adminList.isEditabel"
+                      (click)="adminList.isEditabel = !adminList.isEditabel"><i class="fa fa-edit"></i>{{'advertisement.edit' | translate}}</a>&nbsp;
+                    <a href="javascript:void(0);" (click)="deleteAdvertisementconfirm(adminList)"><i
+                        class="fa fa-trash"></i>{{'advertisement.delete' | translate}}</a> &nbsp;
+                    <a href="javascript:void(0);" *ngIf="adminList.isEditabel" (click)="onStatusSubmit(adminList)"><i
+                        class="fa fa-edit"></i>{{'advertisement.save' | translate}}</a> -->
+                  </td>
+                  <br>
+                  <!-- <td *ngIf="agentIndex == expandIndex">
+                    <div class="container">
+                      <app-game-list></app-game-list>
+                    </div>
+                  </td> -->
+                </tr>
+                <tr *ngIf="expandIndex == agentIndex">
+                  <td colspan="100%">
+                    <div class="container">
+                      <app-game-list></app-game-list>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- The Modal Start-->
+        <div class="modal fade" id="deleteAdvertisementconfirm">
+          <div class="modal-dialog">
+            <div class="modal-content" *ngIf="currentAdv">
+              <!-- Modal Header -->
+              <div class="modal-header">
+                <h4> {{currentAdv.name | titlecase}}
+                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                </h4>
+              </div>
+
+              <!-- Modal body -->
+              <div class="modal-body">
+                {{confirmbMessage}}
+              </div>
+              <!-- Modal footer -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  (click)="deleteAdv();">Delete</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">{{'advertisement.cancel' |
+                  translate}}</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!-- The Model End -->
+        <nav *ngIf="totalAdv > params.per_page">
+          <ul class="pagination">
+            <li class="page-item" *ngIf="params.current_page > 1">
+              <a class="page-link" href="javascript:void(0);" (click)="nextOrPreviousPage(-1)">{{'advertisement.prev' |
+                translate}}</a>
+            </li>
+            <li class="page-item active" [ngClass]="{'active': (page == params.current_page)}"
+              *ngFor="let page of totalPaginationShow">
+              <a class="page-link" href="javascript:void(0);" (click)="paginateList(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" *ngIf="params.current_page != totalPages">
+              <a class="page-link" href="javascript:void(0);" (click)="nextOrPreviousPage(1)">{{'advertisement.next' |
+                translate}}</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<app-loader></app-loader>
