@@ -6,7 +6,8 @@
           <i class="icon-arrow-left-circle" aria-hidden="true"></i>
         </a>
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h5 class="mb-0 text-gray-800">{{ 'key' | translate}}<button data-toggle="modal" data-target="#containerModal" class="btn btn-primary" (click)="selectOption(0)">
+          <h5 class="mb-0 text-gray-800">{{'voucher.banks' | translate}}
+            <button data-toggle="modal" data-target="#containerModal" class="btn btn-primary" (click)="selectOption(0)">
               <i class="fa fa-plus" style="cursor: pointer;" (click)="selectOption(0)"></i>
             </button>
           </h5>
@@ -14,32 +15,34 @@
         <table class="table table-responsive-sm table-bordered table-striped table-sm">
           <thead>
             <tr>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
+              <th>{{'voucher.bankName' | translate}}</th>
+              <th>{{'voucher.accountNumber' | translate}}</th>
+              <th>{{'voucher.status' | translate}}</th>
+              <th>{{'voucher.assignedTo' | translate}}</th>
+              <th>{{'general.actions' | translate}}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="bankError">
-              <td colspan="7" class="table-danger">{{ 'key' | translate}}</td>
+              <td colspan="7" class="table-danger">{{'activityLog.thereWasError' | translate}} </td>
             </tr>
             <tr *ngIf="!bankLoaded && !bankError">
-              <td colspan="7" class="text-center">{{ 'key' | translate}}</td>
+              <td colspan="7" class="text-center">{{ 'loading...' | translate }}</td>
             </tr>
             <tr *ngIf="bankLoaded && !(banks.length>0)">
-              <td colspan="7" class="text-center">{{ 'key' | translate}}</td>
+              <td colspan="7" class="text-center"> {{'activityLog.noDataFound' | translate}}</td>
             </tr>
             <tr *ngFor="let bank of banks; let index = index">
-              <td>{{ 'key' | translate}}</td>
-              <td>{{ 'key' | translate}}</td>
-              <td> <span *ngIf="bank.status==1" class="badge badge-success">{{ 'key' | translate}}</span> <span *ngIf="bank.status==0" class="badge badge-secondary">{{ 'key' | translate}}</span> </td>
-              <td>{{ 'key' | translate}}</td>
+              <td>{{ bank.bank_name }}</td>
+              <td>{{ bank.account_number }}</td>
+              <td> <span *ngIf="bank.status==1" class="badge badge-success">{{ 'active' | translate }}</span> <span *ngIf="bank.status==0" class="badge badge-secondary">{{ 'inactive' | translate }}</span> </td>
+              <td>{{ bank.username }}</td>
               <td>
-                <button class="btn btn-warning" (click)="editBank(index)" data-toggle="modal" data-target="#containerModal"> <i class="fa fa-edit"></i>{{ 'key' | translate}}</button>
+                <button class="btn btn-warning" (click)="editBank(index)" data-toggle="modal" data-target="#containerModal"> <i class="fa fa-edit"></i>{{ 'general.edit' | translate }}</button>
                 <button class="btn btn-danger" (click)="selectBank(index)" data-toggle="modal" data-target="#deleteBank">
-                  <i class="fa fa-remove"></i>{{ 'key' | translate}}</button>
+                  <i class="fa fa-remove"></i>
+                  {{ 'general.delete' | translate }}
+                </button>
               </td>
             </tr>
           </tbody>
@@ -50,7 +53,8 @@
         <hr>
 
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-          <h5 class="mb-0 text-gray-800">{{ 'key' | translate}}<button data-toggle="modal" data-target="#containerModal" class="btn btn-primary" (click)="selectOption(1)">
+          <h5 class="mb-0 text-gray-800">{{'voucher.cards' | translate}}
+            <button data-toggle="modal" data-target="#containerModal" class="btn btn-primary" (click)="selectOption(1)">
               <i class="fa fa-plus" style="cursor: pointer;" (click)="selectOption(1)"></i>
             </button>
           </h5>
@@ -58,39 +62,43 @@
         <table class="table table-responsive-sm table-bordered table-striped table-sm">
           <thead>
             <tr>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
-              <th>{{ 'key' | translate}}</th>
+              <th>{{'voucher.availability' | translate}}</th>
+              <th>{{'voucher.cardNumber' | translate}}</th>
+              <th>{{'voucher.handler' | translate}}</th>
+              <th>{{'voucher.amount' | translate}}</th>
+              <th>{{'voucher.assignedTo' | translate}}</th>
+              <th>{{'general.actions' | translate}}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngIf="cardError">
-              <td colspan="7" class="table-danger">{{ 'key' | translate}}</td>
+              <td colspan="7" class="table-danger">{{'activityLog.thereWasError' | translate}} </td>
             </tr>
             <tr *ngIf="!cardLoaded && !cardError">
-              <td colspan="7" class="text-center">{{ 'key' | translate}}</td>
+              <td colspan="7" class="text-center">{{'voucher.loading' | translate}}</td>
             </tr>
             <tr *ngIf="cardLoaded && !(cards.length>0)">
-              <td colspan="7" class="text-center">{{ 'key' | translate}}</td>
+              <td colspan="7" class="text-center"> {{'activityLog.noDataFound' | translate}}</td>
             </tr>
             <tr *ngFor="let card of cards; let index = index">
               <td>
-                <span class="badge badge-success" *ngIf="!card.usage_date">{{ 'key' | translate}}</span>
-                <span class="badge badge-danger" *ngIf="card.usage_date">{{ 'key' | translate}}</span>
+                <span class="badge badge-success" *ngIf="!card.usage_date">{{ 'general.available' | translate }}</span>
+                <span class="badge badge-danger" *ngIf="card.usage_date">{{ 'general.unavailable' | translate }}</span>
               </td>
-              <td>{{ 'key' | translate}}</td>
-              <td>{{ 'key' | translate}}</td>
-              <td>{{ 'key' | translate}}</td>
-              <td>{{ 'key' | translate}}</td>
+              <td>{{ card.card_number }}</td>
+              <td>{{ card.handler }}</td>
+              <td>{{ card.amount }}</td>
+              <td>{{ card.username }}</td>
               <td>
                 <ng-container *ngIf="!card.usage_date">
                   <button class="btn btn-warning" (click)="editCard(index)" data-toggle="modal" data-target="#containerModal">
-                    <i class="fa fa-edit"></i>{{ 'key' | translate}}</button>
+                    <i class="fa fa-edit"></i>
+                    {{ 'general.edit' | translate }}
+                  </button>
                   <button class="btn btn-danger" (click)="selectCard(index)" data-toggle="modal" data-target="#deleteCard">
-                    <i class="fa fa-remove"></i>{{ 'key' | translate}}</button>
+                    <i class="fa fa-remove"></i>
+                    {{ 'general.delete' | translate }}
+                  </button>
                 </ng-container>
               </td>
             </tr>
@@ -101,7 +109,7 @@
         <!-- <app-pagination [currentPage]="page" [total]="total" [perPage]="perPage" (pageChanged)="pageChanged($event)">
         </app-pagination> -->
         <ng-template #notAvailable>
-          <td>{{ 'key' | translate}}</td>
+          <td>{{ '-' | translate }}</td>
         </ng-template>
       </div>
     </div>
@@ -113,9 +121,9 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">{{ 'key' | translate}}</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ modalTitle | translate}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">{{ 'key' | translate}}</span>
+          <span aria-hidden="true">{{ '&times;' | translate }}</span>
         </button>
       </div>
       <div class="modal-body">
@@ -139,15 +147,15 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">{{ 'key' | translate}}</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ 'deleteBank?' | translate }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">{{ 'key' | translate}}</span>
+          <span aria-hidden="true">{{ '&times;' | translate }}</span>
         </button>
       </div>
-      <div class="modal-body">{{ 'key' | translate}}</div>
+      <div class="modal-body">{{ 'areYouSureToDeleteThisBank?' | translate }}</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'key' | translate}}</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteBank()">{{ 'key' | translate}}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'no' | translate }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteBank()">{{ 'yes' | translate }}</button>
       </div>
     </div>
   </div>
@@ -157,15 +165,15 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">{{ 'key' | translate}}</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{ 'deleteCard?' | translate }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">{{ 'key' | translate}}</span>
+          <span aria-hidden="true">{{ '&times;' | translate }}</span>
         </button>
       </div>
-      <div class="modal-body">{{ 'key' | translate}}</div>
+      <div class="modal-body">{{ 'areYouSureToDeleteThisCard?' | translate }}</div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'key' | translate}}</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteCard()">{{ 'key' | translate}}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'no' | translate }}</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteCard()">{{ 'yes' | translate }}</button>
       </div>
     </div>
   </div>

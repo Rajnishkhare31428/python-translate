@@ -1,8 +1,9 @@
 f = open('en_json_generator/file.html', 'r')
 html = f.read()
-
+result_json = {}
 def get_camel_case(string: str):
-    vector = string.split(' ')
+    global result_json
+    vector = string.strip().split(' ')
     result = ''
     first_time = True
     for element in vector:
@@ -11,6 +12,7 @@ def get_camel_case(string: str):
             first_time = False
         else:
             result += element.capitalize()
+    result_json[result] = string.strip()
     return result
 
 def get_plain_text_index_range_array(html: str):
@@ -22,7 +24,6 @@ def get_plain_text_index_range_array(html: str):
     end_index = 0
     plain_text_index_range_array = []
     index = 0
-    chevron_count = 0
     for char in html:
         if(html[index: index + 4] == '<!--' and not string_ongoing):
             comment_ongoing = True
@@ -63,11 +64,17 @@ def get_r_spaces(text: str):
             return new_string
     return new_string
 
+def get_interpolation_syntax(text: str):
+    return ('{{ \'' + get_camel_case(text) + '\' | translate }}' if not text.strip() == '' else text)
+
 def process_plain_text(text: str):
     index = 0
     new_text = ''
     interpolation_ongoing = False
-    interpolation_index_range = []
+    interpolation_index_range = [{
+        'start_index': 0,
+        'end_index': 0
+    }]
     start_index = 0
     end_index = 0
     result = ''
@@ -84,16 +91,20 @@ def process_plain_text(text: str):
             end_index = index
             interpolation_index_range.append({
                 'start_index': start_index,
-                'end_index': end_index
+                'end_index': end_index + 1
             })
 
         index += 1
-    for i in range(0, len(interpolation_index_range)):
-        print(text[interpolation_index_range[i]['start_index']:interpolation_index_range[i]['end_index'] + 1])
-    return new_text
+    for i in range(1, len(interpolation_index_range)):
+        indexes = interpolation_index_range
+        temp = text[indexes[i - 1]['end_index']: indexes[i]['start_index']]
+        result += get_interpolation_syntax(temp)
+        result += text[indexes[i]['start_index']:indexes[i]['end_index']]
+    result += get_interpolation_syntax(text[interpolation_index_range[len(interpolation_index_range) - 1]['end_index']:])
+    return result
 
 def get_interpolation_text(text: str):
-    return '{{ \'key\' | translate}}' if not text.strip() == '' else  text
+    return process_plain_text(text) if not text.strip() == '' else  text
     
 def main():
     points = get_plain_text_index_range_array(html)
@@ -101,16 +112,10 @@ def main():
     for i in range(1, len(points)):
         new_html += html[points[i - 1]['end_index']:points[i]['start_index']]
         interpolation_text = (html[points[i]['start_index']:points[i]['end_index']])
-        l_spaces = get_l_spaces(interpolation_text)
-        r_spaces = get_r_spaces(interpolation_text)
-        # if(interpolation_text.strip() == ''):
-        #     new_html += (interpolation_text)
-        # else:
-        #     new_html += l_spaces + '{{ \'' + get_camel_case(interpolation_text).strip() + '\' | translate }}' + r_spaces
-        new_html += process_plain_text(interpolation_text)
+        new_html += get_interpolation_text(interpolation_text)
     new_html += html[points[len(points) - 1]['end_index']:]
     out = open('en_json_generator/new-html.html', 'w')
     out.write(new_html)
 
-plain_text = 'The sum of 1 + 1 is {{1 + 1}}. {{ \'key\' | translate }} out of interpolation {{ xyz }} last part'
-print(process_plain_text(plain_text))
+main()
+print(result_json)
