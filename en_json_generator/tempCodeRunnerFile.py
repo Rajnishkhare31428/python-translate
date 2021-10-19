@@ -1,4 +1,4 @@
-in_text_points.append({
-                'start_index': start_index,
-                'stop_index': stop_index,
-            })
+text.strip() == ''):
+    #     new_html += (interpolation_text)
+    # else:
+    #     new_html += l_spaces + '{{ \'' + ge
