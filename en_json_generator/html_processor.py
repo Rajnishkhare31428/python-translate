@@ -79,14 +79,14 @@ def process_plain_text(text: str):
     end_index = 0
     result = ''
     for char in text:
-        if(text[index: index + 2] == '{{'):
+        if(text[index: index + 2] == '{{' or char == '&'):
             interpolation_ongoing = True
             start_index = index
 
         if(not interpolation_ongoing):
             new_text += char
 
-        if(text[index - 1: index + 1] == '}}'):
+        if(text[index - 1: index + 1] == '}}' or char == ';'):
             interpolation_ongoing = False
             end_index = index
             interpolation_index_range.append({
