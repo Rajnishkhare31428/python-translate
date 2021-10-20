@@ -1,6 +1,19 @@
-f = open('en_json_generator/file.html', 'r')
-html = f.read()
+import os
+import json
+
 result_json = {}
+
+def load_json(json_file_path):
+    global result_json
+    json_content = json.load(open(json_file_path))
+    result_json = json_content
+
+def dump_json(json_file_path):
+    global result_json
+    output_stream = open(json_file_path, 'w')
+    output_stream.write(json.dumps(result_json))
+    output_stream.close()
+
 def get_camel_case(string: str):
     global result_json
     vector = string.strip().split(' ')
@@ -106,7 +119,9 @@ def process_plain_text(text: str):
 def get_interpolation_text(text: str):
     return process_plain_text(text) if not text.strip() == '' else  text
     
-def main():
+def process_untranslated_text(html_file_path):
+    html_file = open(html_file_path, 'r')
+    html = html_file.read()
     points = get_plain_text_index_range_array(html)
     new_html = ''
     for i in range(1, len(points)):
@@ -114,8 +129,35 @@ def main():
         interpolation_text = (html[points[i]['start_index']:points[i]['end_index']])
         new_html += get_interpolation_text(interpolation_text)
     new_html += html[points[len(points) - 1]['end_index']:]
-    out = open('en_json_generator/new-html.html', 'w')
-    out.write(new_html)
+    html_file.close()
+    rewrite_file = open(html_file_path, 'w')
+    rewrite_file.write(new_html)
 
-main()
-print(result_json)
+# Returns path of all html file in a directory recursively
+def get_all_html_files(directory):
+    files = []
+    for r, d, f in os.walk(directory):
+        for file in f:
+            if '.html' in file:
+                files.append(os.path.join(r, file))
+    return files
+
+
+def main(project_path, en_json_path):
+    global result_json
+    load_json(en_json_path)
+    html_files = get_all_html_files(project_path)
+    for html_file in html_files:
+        print('Processing file:' + html_file)
+        process_untranslated_text(html_file)
+        print('Done processing file:' + html_file)
+    dump_json(en_json_path)
+    print('Done!!!')
+
+
+def test_execution():
+    json_path = 'D:\\windows_project\\royce\\admin\src\\assets\i18n\\en.json'
+    project_path = 'D:\\windows_project\\royce\\admin\\src'
+    main(project_path, json_path)
+
+test_execution()
