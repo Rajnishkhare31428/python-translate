@@ -26,7 +26,14 @@ def get_camel_case(string: str):
         else:
             result += element.capitalize()
     result_json[result] = string.strip()
-    return result
+    return remove_specified_characters(result, '\'\"`\n')
+
+def remove_specified_characters(string: str, except_str: str):
+    new_string = ''
+    for char in string:
+        if(not char in except_str):
+            new_string += char
+    return new_string
 
 def get_plain_text_index_range_array(html: str):
     plain_text = ''
@@ -123,6 +130,8 @@ def process_untranslated_text(html_file_path):
     html_file = open(html_file_path, 'r')
     html = html_file.read()
     points = get_plain_text_index_range_array(html)
+    if(points == []):
+        return
     new_html = ''
     for i in range(1, len(points)):
         new_html += html[points[i - 1]['end_index']:points[i]['start_index']]
@@ -156,8 +165,20 @@ def main(project_path, en_json_path):
 
 
 def test_execution():
-    json_path = 'D:\\windows_project\\royce\\admin\src\\assets\i18n\\en.json'
-    project_path = 'D:\\windows_project\\royce\\admin\\src'
+    json_path = 'D:\\windows_project\\hyperluxe\\web\\src\\assets\\lang-file\\en.json'
+    project_path = 'D:\\windows_project\\hyperluxe\\web\\src\\app'
     main(project_path, json_path)
 
+def test_user_input_execution():
+    json_path = input('Input your json file complete path')
+    project_path = input('Input your angular project source path')
+    main(project_path, json_path)
+
+def test_single_html_file(html_file_path):
+    print('Processing file:' + html_file_path)
+    process_untranslated_text(html_file_path)
+    print('Done processing file:' + html_file_path)
+    
 test_execution()
+
+# test_single_html_file('D:\\windows_project\\hyperluxe\\web\\src\\app\\pages\\auth\\auth.component.html')
