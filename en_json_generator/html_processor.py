@@ -179,6 +179,6 @@ def test_single_html_file(html_file_path):
     process_untranslated_text(html_file_path)
     print('Done processing file:' + html_file_path)
     
-test_execution()
-
+# test_execution()
 # test_single_html_file('D:\\windows_project\\hyperluxe\\web\\src\\app\\pages\\auth\\auth.component.html')
+test_user_input_execution()

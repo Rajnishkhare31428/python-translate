@@ -27,8 +27,8 @@ def reset_index():
     global index
     index = 0
 
-def put_output_in_file(dict, filename):
-    with open('output/' + filename, 'w') as f:
+def put_output_in_file(dict, filename, output_path = 'output/'):
+    with open(output_path + filename, 'w') as f:
         # json.dumps(dict, f)
         content = json.dumps(dict)
         f.write(content)

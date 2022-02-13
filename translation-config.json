@@ -1,10 +1,10 @@
 {
     "source_language": "en",
     "target_languages": [
-        "ms",
-        "vi",
-        "zh",
-        "es"
+        "hi",
+        "es",
+        "zh"
     ],
-    "input_file": "en.json"
+    "input_file": "D:\\LearnAngular\\Multilingual-Demo\\src\\assets\\lang-file\\en.json",
+    "output_path": "D:\\LearnAngular\\Multilingual-Demo\\src\\assets\\lang-file"
 }
