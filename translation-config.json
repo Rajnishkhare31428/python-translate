@@ -3,8 +3,9 @@
     "target_languages": [
         "hi",
         "es",
-        "zh"
+        "zh",
+        "kn"
     ],
     "input_file": "D:\\LearnAngular\\Multilingual-Demo\\src\\assets\\lang-file\\en.json",
-    "output_path": "D:\\LearnAngular\\Multilingual-Demo\\src\\assets\\lang-file"
+    "output_path": "D:\\LearnAngular\\Multilingual-Demo\\src\\assets\\lang-file\\"
 }
